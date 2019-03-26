@@ -22,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "berbeflo\\Brainfuck" : "src/"
+            "berbeflo\\Brainfuck\\" : "src/"
         }
     },
     "config": {
