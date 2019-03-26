@@ -5,6 +5,7 @@ namespace berbeflo\Brainfuck;
 
 use berbeflo\Brainfuck\Input\Input;
 use berbeflo\Brainfuck\Output\Output;
+use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
