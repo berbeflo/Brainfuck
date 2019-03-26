@@ -1,0 +1,53 @@
+{
+    "name": "berbeflo/brainfuck",
+    "description": "just a brainfuck interpreter",
+    "type": "library",
+    "keywords": [
+        "brainfuck"
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "phpmd/phpmd": "^2.6",
+        "phpstan/phpstan": "^0.11.5",
+        "phpunit/phpunit": "^8.0",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "authors": [
+        {
+            "name": "Florian Berberich",
+            "email": "php.florianberberich@outlook.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "berbeflo\\Brainfuck" : "src/"
+        }
+    },
+    "config": {
+        "use-include-path": false,
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "run-ci" : [
+            "phpcs --standard=PSR2 --report=xml src/",
+            "phpmd src/ xml phpmd.xml",
+            "phpunit --coverage-html cc --whitelist src --testdox tests"
+        ],
+        "fix-cs" : [
+            "php-cs-fixer fix src/ --format=xml --diff --verbose --allow-risky=yes"
+        ],
+        "check-cs" : [
+            "phpcs --standard=PSR2 --report=xml src/",
+            "phpmd src/ xml phpmd.xml"
+        ],
+        "run-test" : [
+            "phpunit --coverage-html cc --whitelist src --testdox tests"
+        ],
+        "run-stan" : [
+            "phpstan analyse -l max -c phpstan.neon src"
+        ]
+    }
+}
