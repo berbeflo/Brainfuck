@@ -27,7 +27,7 @@ class BytesFromStringTest extends TestCase
 
     public function testReset()
     {
-        $bytesObject = new BytesFromStringTest('asd');
+        $bytesObject = new BytesFromString('asd');
         $i = 3;
 
         while ($i-- > 0) {
