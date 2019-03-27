@@ -8,6 +8,7 @@ use berbeflo\Brainfuck\Input\NumbersFromArray;
 use berbeflo\Brainfuck\Interpreter;
 use berbeflo\Brainfuck\Output\NumbersToArray;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class InterpreterTest extends TestCase
 {
@@ -69,5 +70,149 @@ class InterpreterTest extends TestCase
             ->prepare()
             ->execute();
         $this->assertSame([42], $output->getResult());
+    }
+
+    public function testPointerOverflowException()
+    {
+        $config = new Config();
+        $config->setMaxPointerValue(2);
+        $bfWorkingCode = '>>';
+        $bfNotWorkingCode = '>>>';
+        $interpreter = new Interpreter($bfWorkingCode, $config);
+        $interpreter->prepare()->execute();
+        $interpreter = new Interpreter($bfNotWorkingCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function testPointerUnderflowException()
+    {
+        $config = new Config();
+        $config->setMinPointerValue(2);
+        $bfWorkingCode = '><';
+        $bfNotWorkingCode = '><<';
+        $interpreter = new Interpreter($bfWorkingCode, $config);
+        $interpreter->prepare()->execute();
+        $interpreter = new Interpreter($bfNotWorkingCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function testPointerOverflowWrap()
+    {
+        $config = new Config();
+        $input = new NumbersFromArray([12]);
+        $output = new NumbersToArray();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output)
+            ->setMaxPointerValue(2)
+            ->setWrapOnPointerOverflow(true);
+        $bfCode = ',>>>.';
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([12], $output->getResult());
+    }
+    
+    public function testPointerUnderflowWrap()
+    {
+        $config = new Config();
+        $input = new NumbersFromArray([12]);
+        $output = new NumbersToArray();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output)
+            ->setMinPointerValue(2)
+            ->setMaxPointerValue(4)
+            ->setWrapOnPointerOverflow(true);
+        $bfCode = '>,<<<.';
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([12], $output->getResult());
+    }
+
+    public function testRegisterOverflowException()
+    {
+        $config = new Config();
+        $config->setMaxRegisterValue(2);
+        $bfWorkingCode = '++';
+        $bfNotWorkingCode = '+++';
+        $interpreter = new Interpreter($bfWorkingCode, $config);
+        $interpreter->prepare()->execute();
+        $interpreter = new Interpreter($bfNotWorkingCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function testRegisterUnderflowException()
+    {
+        $config = new Config();
+        $config->setMinRegisterValue(-2);
+        $bfWorkingCode = '--';
+        $bfNotWorkingCode = '---';
+        $interpreter = new Interpreter($bfWorkingCode, $config);
+        $interpreter->prepare()->execute();
+        $interpreter = new Interpreter($bfNotWorkingCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function testRegisterWrap()
+    {
+        $input = new NumbersFromArray([2]);
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setMaxRegisterValue(2)
+            ->setMinRegisterValue(-2)
+            ->setWrapOnRegisterOverflow(true)
+            ->setInputObject($input)
+            ->setOutputObject($output);
+        $bfCode = ',+.-.';
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([-2,2], $output->getResult());
+    }
+
+    public function testInputTooSmallException()
+    {
+        $input = new NumbersFromArray([2]);
+        $bfCode = ',';
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setMinRegisterValue(3);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function testInputTooBigException()
+    {
+        $input = new NumbersFromArray([2]);
+        $bfCode = ',';
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setMaxRegisterValue(1);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function testUnknownOperatorException()
+    {
+        $bfCode = '/';
+        $config = new Config();
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
     }
 }
