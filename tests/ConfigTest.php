@@ -11,14 +11,16 @@ class ConfigTest extends TestCase
     {
         $config = new Config();
         $input = $config->getInputObject();
-        $this->expectException(RuntimeException::class, $input->getNextChar());
+        $this->expectException(RuntimeException::class);
+        $input->getNextChar();
     }
 
     public function testDefaultOutput()
     {
         $config = new Config();
         $output = $config->getOutputObject();
-        $this->expectException(RuntimeException::class, $output->writeChar(0));
+        $this->expectException(RuntimeException::class);
+        $output->writeChar(0);
     }
 
     public function testDefaultValues()
@@ -28,7 +30,7 @@ class ConfigTest extends TestCase
         $this->assertSame(255, $config->getMaxRegisterValue());
         $this->assertSame(0, $config->getMinPointerValue());
         $this->assertSame(255, $config->getMaxPointerValue());
-        $this->assertFalse($config->wrapOnPointerOverflow());
-        $this->assertFalse($config->wrapOnRegisterOverflow());
+        $this->assertFalse($config->getWrapOnPointerOverflow());
+        $this->assertFalse($config->getWrapOnRegisterOverflow());
     }
 }
