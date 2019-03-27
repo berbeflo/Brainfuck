@@ -13,6 +13,8 @@ final class Interpreter
     private $pointer;
     private $memory;
 
+    private $loopPositions;
+
     public function __construct(string $brainfuckCode, Config $config)
     {
         $this->brainfuckCode = $brainfuckCode;
@@ -21,6 +23,24 @@ final class Interpreter
 
     public function prepare() : Interpreter
     {
+        $this->loopPositions = [];
+
+        for ($currentOperator = 0; $currentOperator < \strlen($this->brainfuckCode); $currentOperator++) {
+            switch ($this->brainfuckCode[$currentOperator]) {
+                case '[':
+                    $this->loopPositions[] = [$currentOperator, 0];
+                    break;
+                case ']':
+                    for ($index = \count($this->loopPositions)-1; $index >= 0; $index--) {
+                        if ($this->loopPositions[$index][1] === 0) {
+                            $this->loopPositions[$index][1] = $currentOperator;
+                            break;
+                        }
+                    }
+                    break;
+            }
+        }
+
         return $this;
     }
 
@@ -66,6 +86,14 @@ final class Interpreter
                     if (!\array_key_exists($this->pointer, $this->memory)) {
                         $this->memory[$this->pointer] = $defaultRegisterValue;
                     }
+                    break;
+                case '[':
+                    if (!$this->isLoopConditionSatisfied()) {
+                        $currentOperator = $this->findLoopEnd($currentOperator);
+                    }
+                    break;
+                case ']':
+                    $currentOperator = $this->findLoopStart($currentOperator)-1;
                     break;
                 default:
                     throw new RuntimeException();
@@ -148,5 +176,32 @@ final class Interpreter
             }
             throw new RuntimeException();
         }
+    }
+
+    private function isLoopConditionSatisfied() : bool
+    {
+        ['register' => $falseValue] = $this->getDefaultValues();
+
+        return $this->memory[$this->pointer] > $falseValue;
+    }
+
+    private function findLoopEnd(int $position) : int
+    {
+        foreach ($this->loopPositions as $loopPosition) {
+            if ($loopPosition[0] === $position) {
+                return $loopPosition[1];
+            }
+        }
+        throw new RuntimeException();
+    }
+
+    private function findLoopStart(int $position) : int
+    {
+        foreach ($this->loopPositions as $loopPosition) {
+            if ($loopPosition[1] === $position) {
+                return $loopPosition[0];
+            }
+        }
+        throw new RuntimeException();
     }
 }
