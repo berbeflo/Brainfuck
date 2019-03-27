@@ -28,7 +28,7 @@ final class Interpreter
         for ($currentOperator = 0; $currentOperator < \strlen($this->brainfuckCode); $currentOperator++) {
             switch ($this->brainfuckCode[$currentOperator]) {
                 case '[':
-                    $this->loopPositions[] = [$currentOperator, 0];
+                    $this->loopPositions[] = [$currentOperator, 0, 0];
                     break;
                 case ']':
                     for ($index = \count($this->loopPositions)-1; $index >= 0; $index--) {
@@ -54,6 +54,7 @@ final class Interpreter
         $this->pointer = $defaultPointerValue;
         $this->memory = [];
         $this->memory[$this->pointer] = $defaultRegisterValue;
+        $this->resetLoopCounter();
 
         for ($currentOperator = 0; $currentOperator < \strlen($this->brainfuckCode); $currentOperator++) {
             switch ($this->brainfuckCode[$currentOperator]) {
@@ -90,7 +91,9 @@ final class Interpreter
                 case '[':
                     if (!$this->isLoopConditionSatisfied()) {
                         $currentOperator = $this->findLoopEnd($currentOperator);
+                        break;
                     }
+                    $this->checkIterations($currentOperator);
                     break;
                 case ']':
                     $currentOperator = $this->findLoopStart($currentOperator)-1;
@@ -206,5 +209,28 @@ final class Interpreter
             }
         }
         throw new RuntimeException();
+    }
+
+    private function checkIterations(int $position) : void
+    {
+        foreach ($this->loopPositions as $key => $loopPosition) {
+            if ($loopPosition[0] === $position) {
+                $this->loopPositions[$key][2] += 1;
+
+                if ($this->loopPositions[$key][2] > $this->config->getMaximumIterations()) {
+                    throw new RuntimeException();
+                }
+            }
+        }
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function resetLoopCounter() : void
+    {
+        foreach ($this->loopPositions as $key => $loopPosition) {
+            $this->loopPositions[$key][2] = 0;
+        }
     }
 }
