@@ -39,7 +39,7 @@ class NumbersFromArrayTest extends TestCase
 
     public function testNoIntException()
     {
-        $this->excepctException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $numbersObject = new NumbersFromArray(["1"]);
     }
 }
