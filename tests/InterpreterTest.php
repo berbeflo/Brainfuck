@@ -56,7 +56,8 @@ class InterpreterTest extends TestCase
         $this->assertSame([3, 2, 1], $output->getResult());
     }
 
-    public function testInputOutput() {
+    public function testInputOutput()
+    {
         $bfCode = ',.';
         $output = new NumbersToArray();
         $config = new Config();
