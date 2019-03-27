@@ -3,9 +3,11 @@
 declare(strict_types=1);
 namespace berbeflo\Brainfuck\Input;
 
+use berbeflo\Brainfuck\Definition\Input;
+use berbeflo\Brainfuck\Definition\Resettable;
 use RuntimeException;
 
-class BytesFromString implements Input
+class BytesFromString implements Input, Resettable
 {
     private $sourceString;
     private $backupString;

@@ -3,10 +3,12 @@
 declare(strict_types=1);
 namespace berbeflo\Brainfuck\Input;
 
+use berbeflo\Brainfuck\Definition\Input;
+use berbeflo\Brainfuck\Definition\Resettable;
 use InvalidArgumentException;
 use RuntimeException;
 
-class NumbersFromArray implements Input
+class NumbersFromArray implements Input, Resettable
 {
     private $sourceArray;
     private $backupArray;

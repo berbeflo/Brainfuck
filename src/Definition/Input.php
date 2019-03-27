@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace berbeflo\Brainfuck\Input;
+namespace berbeflo\Brainfuck\Definition;
 
 interface Input
 {

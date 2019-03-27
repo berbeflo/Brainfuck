@@ -3,7 +3,10 @@
 declare(strict_types=1);
 namespace berbeflo\Brainfuck\Output;
 
-class NumbersToArray implements Output
+use berbeflo\Brainfuck\Definition\Output;
+use berbeflo\Brainfuck\Definition\Resettable;
+
+class NumbersToArray implements Output, Resettable
 {
     private $currentArray;
 

@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace berbeflo\Brainfuck\Output;
+namespace berbeflo\Brainfuck\Definition;
 
 interface Output
 {

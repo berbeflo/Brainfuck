@@ -3,7 +3,10 @@
 declare(strict_types=1);
 namespace berbeflo\Brainfuck\Output;
 
-class BytesToString implements Output
+use berbeflo\Brainfuck\Definition\Output;
+use berbeflo\Brainfuck\Definition\Resettable;
+
+class BytesToString implements Output, Resettable
 {
     private $currentString;
 
