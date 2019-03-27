@@ -55,4 +55,18 @@ class InterpreterTest extends TestCase
             ->execute();
         $this->assertSame([3, 2, 1], $output->getResult());
     }
+
+    public function testInputOutput() {
+        $bfCode = ',.';
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setInputObject(new NumbersFromArray([42]))
+            ->setOutputObject($output);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter
+            ->prepare()
+            ->execute();
+        $this->assertSame([42], $output->getResult());
+    }
 }
