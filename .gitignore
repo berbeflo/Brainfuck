@@ -3,3 +3,4 @@ vendor/
 *.log
 .php_cs.cache
 .phpunit.result.cache
+cc/

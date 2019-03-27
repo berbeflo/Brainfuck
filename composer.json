@@ -25,6 +25,11 @@
             "berbeflo\\Brainfuck\\" : "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "berbeflo\\Brainfuck\\Test\\" : "tests/"
+        }
+    },
     "config": {
         "use-include-path": false,
         "optimize-autoloader": true,
@@ -44,7 +49,7 @@
             "phpmd src/ xml phpmd.xml"
         ],
         "run-test" : [
-            "phpunit --coverage-html cc --whitelist src --testdox tests"
+            "phpunit --coverage-html cc --whitelist src --testdox --bootstrap tests/bootstrap.php tests"
         ],
         "run-stan" : [
             "phpstan analyse -l max -c phpstan.neon src"
