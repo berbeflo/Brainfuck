@@ -272,4 +272,22 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $this->assertSame([4], $output->getResult());
     }
+
+    public function missingLoopStart() {
+        $bfCode = ']';
+        $config = new Config();
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
+
+    public function missingLoopEnd() {
+        $bfCode = '[';
+        $config = new Config();
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
 }
