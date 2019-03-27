@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace berbeflo\Brainfuck\Test\Input;
 
 use berbeflo\Brainfuck\Input\NumbersFromArray;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -20,7 +21,7 @@ class NumbersFromArrayTest extends TestCase
     public function testException()
     {
         $numbersObject = new NumbersFromArray([]);
-        $this->expectException(RuntimeException::cass);
+        $this->expectException(RuntimeException::class);
         $numbersObject->getNextChar();
     }
 
@@ -34,5 +35,11 @@ class NumbersFromArrayTest extends TestCase
             $this->assertSame(4, $numbersObject->getNextChar());
             $numbersObject->reset();
         }
+    }
+
+    public function testNoIntException()
+    {
+        $this->excepctException(InvalidArgumentException::class);
+        $numbersObject = new NumbersFromArray(["1"]);
     }
 }
