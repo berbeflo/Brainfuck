@@ -42,7 +42,8 @@
             "phpunit --coverage-html cc --whitelist src --testdox tests"
         ],
         "fix-cs" : [
-            "php-cs-fixer fix src/ --format=xml --diff --verbose --allow-risky=yes"
+            "php-cs-fixer fix src/ --format=xml --diff --verbose --allow-risky=yes",
+            "php-cs-fixer fix tests/ --format=xml --diff --verbose --allow-risky=yes"
         ],
         "check-cs" : [
             "phpcs --standard=PSR2 --report=xml src/",
