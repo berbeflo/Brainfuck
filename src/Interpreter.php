@@ -189,10 +189,13 @@ final class Interpreter
     {
         foreach ($this->loopPositions as $loopPosition) {
             if ($loopPosition[0] === $position) {
+                if ($loopPosition[1] === 0) {
+                    throw new RuntimeException();
+                }
+
                 return $loopPosition[1];
             }
         }
-        throw new RuntimeException();
     }
 
     private function findLoopStart(int $position) : int

@@ -273,7 +273,7 @@ class InterpreterTest extends TestCase
         $this->assertSame([4], $output->getResult());
     }
 
-    public function missingLoopStart()
+    public function testMissingLoopStart()
     {
         $bfCode = ']';
         $config = new Config();
@@ -283,7 +283,7 @@ class InterpreterTest extends TestCase
         $interpreter->execute();
     }
 
-    public function missingLoopEnd()
+    public function testMissingLoopEnd()
     {
         $bfCode = '[';
         $config = new Config();
