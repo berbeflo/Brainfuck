@@ -18,6 +18,7 @@ final class Config
     private $maxRegisterValue = 255;
     private $minPointerValue = 0;
     private $maxPointerValue = 255;
+    private $maximumIterations = 255;
     private $wrapOnRegisterOverflow = false;
     private $wrapOnPointerOverflow = false;
 
@@ -138,6 +139,18 @@ final class Config
     public function setWrapOnRegisterOverflow(bool $wrapOnRegisterOverflow) : Config
     {
         $this->wrapOnRegisterOverflow = $wrapOnRegisterOverflow;
+
+        return $this;
+    }
+
+    public function getMaximumIterations() : int
+    {
+        return $this->maximumIterations;
+    }
+
+    public function setMaximumIterations(int $maximumIterations) : Config
+    {
+        $this->maximumIterations = $maximumIterations;
 
         return $this;
     }
