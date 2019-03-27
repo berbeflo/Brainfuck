@@ -292,4 +292,20 @@ class InterpreterTest extends TestCase
         $this->expectException(RuntimeException::class);
         $interpreter->execute();
     }
+
+    public function testMaximumInterations()
+    {
+        $bfCode = ',[-]';
+        $input = new NumbersFromArray([5]);
+        $config = new Config();
+        $config
+            ->setMaximumIterations(5)
+            ->setInputObject($input);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $config->setMaximumIterations(4);
+        $input->reset();
+        $this->expectException(RuntimeException::class);
+        $interpreter->execute();
+    }
 }

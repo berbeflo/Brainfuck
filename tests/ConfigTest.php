@@ -32,5 +32,6 @@ class ConfigTest extends TestCase
         $this->assertSame(255, $config->getMaxPointerValue());
         $this->assertFalse($config->getWrapOnPointerOverflow());
         $this->assertFalse($config->getWrapOnRegisterOverflow());
+        $this->assertSame(255, $config->getMaximumIterations());
     }
 }
