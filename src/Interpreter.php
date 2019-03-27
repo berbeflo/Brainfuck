@@ -28,12 +28,16 @@ final class Interpreter
         for ($currentOperator = 0; $currentOperator < \strlen($this->brainfuckCode); $currentOperator++) {
             switch ($this->brainfuckCode[$currentOperator]) {
                 case '[':
-                    $this->loopPositions[] = [$currentOperator, 0, 0];
+                    $this->loopPositions[] = [
+                        'start' => $currentOperator,
+                        'end' => 0,
+                        'counter' => 0,
+                    ];
                     break;
                 case ']':
                     for ($index = \count($this->loopPositions)-1; $index >= 0; $index--) {
-                        if ($this->loopPositions[$index][1] === 0) {
-                            $this->loopPositions[$index][1] = $currentOperator;
+                        if ($this->loopPositions[$index]['end'] === 0) {
+                            $this->loopPositions[$index]['end'] = $currentOperator;
                             break;
                         }
                     }
@@ -190,34 +194,38 @@ final class Interpreter
 
     private function findLoopEnd(int $position) : int
     {
-        foreach ($this->loopPositions as $loopPosition) {
-            if ($loopPosition[0] === $position) {
-                if ($loopPosition[1] === 0) {
-                    throw new RuntimeException();
-                }
+        $endPosition = $this->searchInLoop('start', 'end', $position);
 
-                return $loopPosition[1];
-            }
+        if ($endPosition === 0) {
+            throw new RuntimeException();
         }
+
+        return $endPosition;
     }
 
     private function findLoopStart(int $position) : int
     {
+        return $this->searchInLoop('end', 'start', $position);
+    }
+
+    private function searchInLoop(string $keyNeedle, string $keyGet, int $position) : int
+    {
         foreach ($this->loopPositions as $loopPosition) {
-            if ($loopPosition[1] === $position) {
-                return $loopPosition[0];
+            if ($loopPosition[$keyNeedle] === $position) {
+                return $loopPosition[$keyGet];
             }
         }
+
         throw new RuntimeException();
     }
 
     private function checkIterations(int $position) : void
     {
         foreach ($this->loopPositions as $key => $loopPosition) {
-            if ($loopPosition[0] === $position) {
-                $this->loopPositions[$key][2] += 1;
+            if ($loopPosition['start'] === $position) {
+                $this->loopPositions[$key]['counter'] += 1;
 
-                if ($this->loopPositions[$key][2] > $this->config->getMaximumIterations()) {
+                if ($this->loopPositions[$key]['counter'] > $this->config->getMaximumIterations()) {
                     throw new RuntimeException();
                 }
             }
