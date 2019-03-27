@@ -28,8 +28,12 @@ final class Config
     public function getInputObject() : Input
     {
         if ($this->inputObject === null) {
-            // TODO
-            throw new RuntimeException();
+            return new class() implements Input {
+                public function getNextChar() : int
+                {
+                    throw new RuntimeException();
+                }
+            };
         }
 
         return $this->inputObject;
@@ -66,11 +70,18 @@ final class Config
         return $this;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function getOutputObject() : Output
     {
         if ($this->outputObject === null) {
-            // TODO
-            throw new RuntimeException();
+            return new class() implements Output {
+                public function writeChar(int $char) : void
+                {
+                    throw new RuntimeException();
+                }
+            };
         }
 
         return $this->outputObject;
