@@ -215,4 +215,61 @@ class InterpreterTest extends TestCase
         $this->expectException(RuntimeException::class);
         $interpreter->execute();
     }
+
+    public function testSimpleLoop()
+    {
+        $bfCode = ',>,<[->+<]>.';
+        $input = new NumbersFromArray([2, 3]);
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([5], $output->getResult());
+    }
+
+    public function testTwoLoops()
+    {
+        $bfCode = ',>,<[->+<]>[-<+>]<.';
+        $input = new NumbersFromArray([2, 3]);
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([5], $output->getResult());
+    }
+
+    public function testNestedLoops()
+    {
+        $bfCode = ',>,>,<<[->[->+<]<]>>.';
+        $input = new NumbersFromArray([2, 3, 4]);
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([7], $output->getResult());
+    }
+
+    public function testNonZeroLoopBoundary()
+    {
+        $bfCode = ',>,<[->+<]>.';
+        $input = new NumbersFromArray([2, 3]);
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output)
+            ->setMinRegisterValue(1);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare()->execute();
+        $this->assertSame([4], $output->getResult());
+    }
 }
