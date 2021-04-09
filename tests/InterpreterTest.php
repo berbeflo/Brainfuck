@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace berbeflo\Brainfuck\Test;
 
 use berbeflo\Brainfuck\Config;
@@ -115,7 +116,7 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $this->assertSame([12], $output->getResult());
     }
-    
+
     public function testPointerUnderflowWrap()
     {
         $config = new Config();
