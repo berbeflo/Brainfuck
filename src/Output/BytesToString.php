@@ -8,7 +8,7 @@ use berbeflo\Brainfuck\Definition\Resettable;
 
 class BytesToString implements Output, Resettable
 {
-    private $currentString;
+    private string $currentString;
 
     public function __construct()
     {

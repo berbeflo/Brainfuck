@@ -7,13 +7,20 @@ use RuntimeException;
 
 final class Interpreter
 {
-    private $brainfuckCode;
-    private $config;
+    private string $brainfuckCode;
+    private Config $config;
 
-    private $pointer;
-    private $memory;
+    private int $pointer;
 
-    private $loopPositions;
+    /**
+     * @var array<int, int>
+     */
+    private array $memory;
+
+    /**
+     * @var array<int, array>
+     */
+    private array $loopPositions;
 
     public function __construct(string $brainfuckCode, Config $config)
     {
@@ -53,6 +60,9 @@ final class Interpreter
      */
     public function execute() : Interpreter
     {
+        $defaultRegisterValue = null;
+        $defaultPointerValue = null;
+
         ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue] = $this->getDefaultValues();
 
         $this->pointer = $defaultPointerValue;
@@ -110,6 +120,9 @@ final class Interpreter
         return $this;
     }
 
+    /**
+     * @return array<string, int>
+     */
     private function getDefaultValues() : array
     {
         $defaultRegisterValue =
@@ -187,6 +200,7 @@ final class Interpreter
 
     private function isLoopConditionSatisfied() : bool
     {
+        $falseValue = null;
         ['register' => $falseValue] = $this->getDefaultValues();
 
         return $this->memory[$this->pointer] > $falseValue;

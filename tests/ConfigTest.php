@@ -3,7 +3,6 @@
 declare(strict_types=1);
 use berbeflo\Brainfuck\Config;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class ConfigTest extends TestCase
 {

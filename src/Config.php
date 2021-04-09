@@ -12,15 +12,15 @@ use RuntimeException;
  */
 final class Config
 {
-    private $inputObject;
-    private $outputObject;
-    private $minRegisterValue = 0;
-    private $maxRegisterValue = 255;
-    private $minPointerValue = 0;
-    private $maxPointerValue = 255;
-    private $maximumIterations = 255;
-    private $wrapOnRegisterOverflow = false;
-    private $wrapOnPointerOverflow = false;
+    private ?Input $inputObject = null;
+    private ?Output $outputObject = null;
+    private int $minRegisterValue = 0;
+    private int $maxRegisterValue = 255;
+    private int $minPointerValue = 0;
+    private int $maxPointerValue = 255;
+    private int $maximumIterations = 255;
+    private bool $wrapOnRegisterOverflow = false;
+    private bool $wrapOnPointerOverflow = false;
 
     public function __construct()
     {
