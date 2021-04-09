@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace berbeflo\Brainfuck\Input;
 
 use berbeflo\Brainfuck\Definition\Input;
@@ -18,12 +19,12 @@ class BytesFromString implements Input, Resettable
         $this->backupString = $byteString;
     }
 
-    public function reset() : void
+    public function reset(): void
     {
         $this->sourceString = $this->backupString;
     }
 
-    public function getNextChar() : int
+    public function getNextChar(): int
     {
         if (\strlen($this->sourceString) === 0) {
             throw new RuntimeException();

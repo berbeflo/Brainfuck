@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace berbeflo\Brainfuck\Input;
 
 use berbeflo\Brainfuck\Definition\Input;
@@ -35,12 +36,12 @@ class NumbersFromArray implements Input, Resettable
         $this->backupArray = $numbersArray;
     }
 
-    public function reset() : void
+    public function reset(): void
     {
         $this->sourceArray = $this->backupArray;
     }
 
-    public function getNextChar() : int
+    public function getNextChar(): int
     {
         if (\count($this->sourceArray) === 0) {
             throw new RuntimeException();

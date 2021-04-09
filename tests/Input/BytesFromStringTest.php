@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace berbeflo\Brainfuck\Test\Input;
 
 use berbeflo\Brainfuck\Input\BytesFromString;
