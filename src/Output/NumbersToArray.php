@@ -8,7 +8,10 @@ use berbeflo\Brainfuck\Definition\Resettable;
 
 class NumbersToArray implements Output, Resettable
 {
-    private $currentArray;
+    /**
+     * @var array<int, int>
+     */
+    private array $currentArray;
 
     public function __construct()
     {
@@ -20,6 +23,9 @@ class NumbersToArray implements Output, Resettable
         $this->currentArray[] = $char;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getResult() : array
     {
         return $this->currentArray;

@@ -9,8 +9,8 @@ use RuntimeException;
 
 class BytesFromString implements Input, Resettable
 {
-    private $sourceString;
-    private $backupString;
+    private string $sourceString;
+    private string $backupString;
 
     public function __construct(string $byteString)
     {

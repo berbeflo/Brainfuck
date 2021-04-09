@@ -10,9 +10,19 @@ use RuntimeException;
 
 class NumbersFromArray implements Input, Resettable
 {
-    private $sourceArray;
-    private $backupArray;
+    /**
+     * @var array<int, int>
+     */
+    private array $sourceArray;
 
+    /**
+     * @var array<int, int>
+     */
+    private array $backupArray;
+
+    /**
+     * @param array<int, int> $numbersArray
+     */
     public function __construct(array $numbersArray)
     {
         \array_walk($numbersArray, function ($number) {
