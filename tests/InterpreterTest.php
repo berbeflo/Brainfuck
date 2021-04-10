@@ -211,7 +211,7 @@ class InterpreterTest extends TestCase
     {
         $bfCode = '/';
         $config = new Config();
-        $config->getAllowUnknownTokens(false);
+        $config->setAllowUnknownTokens(false);
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
         $this->expectException(RuntimeException::class);
@@ -220,12 +220,17 @@ class InterpreterTest extends TestCase
 
     public function testAllowUnknownToken()
     {
-        $bfCode = '/';
+        $bfCode = ',/-/.';
+        $output = new NumbersToArray();
         $config = new Config();
+        $config
+            ->setInputObject(new NumbersFromArray([5]))
+            ->setOutputObject($output);
         $interpreter = new Interpreter($bfCode, $config);
-        $interpreter->prepare();
-        $interpreter->execute();
-        $this->assertTrue(true);
+        $interpreter
+            ->prepare()
+            ->execute();
+        $this->assertSame([4], $output->getResult());
     }
 
     public function testSimpleLoop()
