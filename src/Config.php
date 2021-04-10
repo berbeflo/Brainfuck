@@ -22,6 +22,7 @@ final class Config
     private int $maximumIterations = 255;
     private bool $wrapOnRegisterOverflow = false;
     private bool $wrapOnPointerOverflow = false;
+    private bool $allowUnknownTokens = true;
 
     public function __construct()
     {
@@ -68,6 +69,18 @@ final class Config
     public function setWrapOnPointerOverflow(bool $wrapOnPointerOverflow): Config
     {
         $this->wrapOnPointerOverflow = $wrapOnPointerOverflow;
+
+        return $this;
+    }
+
+    public function getAllowUnknownTokens(): bool
+    {
+        return $this->allowUnknownTokens;
+    }
+
+    public function setAllowUnknownTokens(bool $allowUnknownTokens): Config
+    {
+        $this->allowUnknownTokens = $allowUnknownTokens;
 
         return $this;
     }
