@@ -211,10 +211,21 @@ class InterpreterTest extends TestCase
     {
         $bfCode = '/';
         $config = new Config();
+        $config->getAllowUnknownTokens(false);
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
         $this->expectException(RuntimeException::class);
         $interpreter->execute();
+    }
+
+    public function testAllowUnknownToken()
+    {
+        $bfCode = '/';
+        $config = new Config();
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->prepare();
+        $interpreter->execute();
+        $this->assertTrue(true);
     }
 
     public function testSimpleLoop()
