@@ -114,6 +114,9 @@ final class Interpreter
                     $currentOperator = $this->findLoopStart($currentOperator) - 1;
                     break;
                 default:
+                    if ($this->config->getAllowUnknownTokens()) {
+                        continue 2;
+                    }
                     throw new RuntimeException();
             }
         }
