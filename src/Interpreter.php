@@ -138,7 +138,9 @@ final class Interpreter
         $char = $this->config->getInputObject()->getNextChar();
 
         if ($char > $this->config->getMaxRegisterValue() || $char < $this->config->getMinRegisterValue()) {
-            throw new InterpreterException(str_replace('{0}', $char, 'The provided char <{0}> is out of bounds'));
+            throw new InterpreterException(
+                \str_replace('{0}', (string) $char, 'The provided char <{0}> is out of bounds')
+            );
         }
 
         return $char;
@@ -157,7 +159,7 @@ final class Interpreter
 
                 return;
             }
-            throw new InterpreterException(str_replace('{0}', $this->pointer, 'Cannot access register {0}'));
+            throw new InterpreterException(\str_replace('{0}', (string) $this->pointer, 'Cannot access register {0}'));
         }
 
         if ($this->pointer < $this->config->getMinPointerValue()) {
@@ -166,7 +168,7 @@ final class Interpreter
 
                 return;
             }
-            throw new InterpreterException(str_replace('{0}', $this->pointer, 'Cannot access register {0}'));
+            throw new InterpreterException(\str_replace('{0}', (string) $this->pointer, 'Cannot access register {0}'));
         }
     }
 
@@ -180,7 +182,7 @@ final class Interpreter
 
                 return;
             }
-            throw new InterpreterException(str_replace('{0}', $currentValue, 'Cannot handle value {0}'));
+            throw new InterpreterException(\str_replace('{0}', (string) $currentValue, 'Cannot handle value {0}'));
         }
 
         if ($currentValue < $this->config->getMinRegisterValue()) {
@@ -189,7 +191,7 @@ final class Interpreter
 
                 return;
             }
-            throw new InterpreterException(str_replace('{0}', $currentValue, 'Cannot handle value {0}'));
+            throw new InterpreterException(\str_replace('{0}', (string) $currentValue, 'Cannot handle value {0}'));
         }
     }
 
