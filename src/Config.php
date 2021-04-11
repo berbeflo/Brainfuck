@@ -34,7 +34,7 @@ final class Config
             return new class() implements Input {
                 public function getNextChar(): int
                 {
-                    throw new RuntimeException();
+                    throw new RuntimeException('Default Input object cannot provide any data.');
                 }
             };
         }
@@ -94,7 +94,7 @@ final class Config
             return new class() implements Output {
                 public function writeChar(int $char): void
                 {
-                    throw new RuntimeException();
+                    throw new RuntimeException('Default Output object does not accept any data.');
                 }
             };
         }
