@@ -16,7 +16,6 @@ $brainfuckConfig
     ->setOutputObject($outputObject);
 $brainfuckInterpreter = new Interpreter($helloWorldProgram, $brainfuckConfig);
 $brainfuckInterpreter
-    ->prepare()
     ->execute();
     
 echo $outputObject->getResult();
