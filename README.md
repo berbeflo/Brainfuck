@@ -28,12 +28,13 @@ $code = '...';
 ```php
 $config = new berbeflo\Brainfuck\Config();
 ```
-- Create the interpreter, prepare and run it
+- Create the interpreter and run it
 ```php
 $interpreter = new berbeflo\Brainfuck\Interpreter($code, $config);
-$interpreter->prepare();
 $interpreter->execute();
 ```
+
+The interpreter can be executed multiple times. It's also possible to change the values of the Config object between the executions. But not the code. For different code, create a different Interpreter instance.
 
 ## Config options
 - `setInputObject` define the object that provides the input values; has to implement `berbeflo\Brainfuck\Definition\Input`
