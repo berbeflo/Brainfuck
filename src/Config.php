@@ -168,4 +168,22 @@ final class Config
 
         return $this;
     }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getDefaultValues(): array
+    {
+        $defaultRegisterValue =
+            \min(
+                $this->getMaxRegisterValue(),
+                \max($this->getMinRegisterValue(), 0)
+            );
+        $defaultPointerValue = \min(
+            $this->getMaxPointerValue(),
+            \max($this->getMinPointerValue(), 0)
+        );
+
+        return ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue];
+    }
 }

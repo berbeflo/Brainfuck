@@ -247,6 +247,20 @@ class InterpreterTest extends TestCase
         $this->assertSame([5], $output->getResult());
     }
 
+    public function testExecuteWithoutPrepare()
+    {
+        $bfCode = ',>,<[->+<]>.';
+        $input = new NumbersFromArray([2, 3]);
+        $output = new NumbersToArray();
+        $config = new Config();
+        $config
+            ->setInputObject($input)
+            ->setOutputObject($output);
+        $interpreter = new Interpreter($bfCode, $config);
+        $interpreter->execute();
+        $this->assertSame([5], $output->getResult());
+    }
+
     public function testTwoLoops()
     {
         $bfCode = ',>,<[->+<]>[-<+>]<.';
