@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace berbeflo\Brainfuck;
 
-use RuntimeException;
-
 final class Interpreter
 {
     private string $brainfuckCode;
     private Config $config;
 
     private int $pointer;
+    private bool $isPrepared = false;
 
     /**
      * @var array<int, int>
@@ -53,6 +52,8 @@ final class Interpreter
             }
         }
 
+        $this->isPrepared = true;
+
         return $this;
     }
 
@@ -61,10 +62,14 @@ final class Interpreter
      */
     public function execute(): Interpreter
     {
+        if (!$this->isPrepared) {
+            $this->prepare();
+        }
+
         $defaultRegisterValue = null;
         $defaultPointerValue = null;
 
-        ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue] = $this->getDefaultValues();
+        ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue] = $this->config->getDefaultValues();
 
         $this->pointer = $defaultPointerValue;
         $this->memory = [];
@@ -117,29 +122,15 @@ final class Interpreter
                     if ($this->config->getAllowUnknownTokens()) {
                         continue 2;
                     }
-                    throw new RuntimeException();
+                    throw new InterpreterException(
+                        'Token is not allowed.',
+                        $currentOperator,
+                        $this->brainfuckCode[$currentOperator]
+                    );
             }
         }
 
         return $this;
-    }
-
-    /**
-     * @return array<string, int>
-     */
-    private function getDefaultValues(): array
-    {
-        $defaultRegisterValue =
-            \min(
-                $this->config->getMaxRegisterValue(),
-                \max($this->config->getMinRegisterValue(), 0)
-            );
-        $defaultPointerValue = \min(
-            $this->config->getMaxPointerValue(),
-            \max($this->config->getMinPointerValue(), 0)
-        );
-
-        return ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue];
     }
 
     private function readChar(): int
@@ -147,7 +138,7 @@ final class Interpreter
         $char = $this->config->getInputObject()->getNextChar();
 
         if ($char > $this->config->getMaxRegisterValue() || $char < $this->config->getMinRegisterValue()) {
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $char, 'The provided char <{0}> is out of bounds'));
         }
 
         return $char;
@@ -166,7 +157,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $this->pointer, 'Cannot access register {0}'));
         }
 
         if ($this->pointer < $this->config->getMinPointerValue()) {
@@ -175,7 +166,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $this->pointer, 'Cannot access register {0}'));
         }
     }
 
@@ -189,7 +180,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $currentValue, 'Cannot handle value {0}'));
         }
 
         if ($currentValue < $this->config->getMinRegisterValue()) {
@@ -198,14 +189,14 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $currentValue, 'Cannot handle value {0}'));
         }
     }
 
     private function isLoopConditionSatisfied(): bool
     {
         $falseValue = null;
-        ['register' => $falseValue] = $this->getDefaultValues();
+        ['register' => $falseValue] = $this->config->getDefaultValues();
 
         return $this->memory[$this->pointer] > $falseValue;
     }
@@ -215,7 +206,7 @@ final class Interpreter
         $endPosition = $this->searchInLoop('start', 'end', $position);
 
         if ($endPosition === 0) {
-            throw new RuntimeException();
+            throw new InterpreterException('Unmatched loops in code.');
         }
 
         return $endPosition;
@@ -234,7 +225,7 @@ final class Interpreter
             }
         }
 
-        throw new RuntimeException();
+        throw new InterpreterException('Unmatched loops in code.');
     }
 
     private function checkIterations(int $position): void
@@ -244,7 +235,7 @@ final class Interpreter
                 $this->loopPositions[$key]['counter'] += 1;
 
                 if ($this->loopPositions[$key]['counter'] > $this->config->getMaximumIterations()) {
-                    throw new RuntimeException();
+                    throw new InterpreterException('Maximum iterations exceeded.');
                 }
             }
         }

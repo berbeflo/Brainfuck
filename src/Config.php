@@ -34,7 +34,7 @@ final class Config
             return new class() implements Input {
                 public function getNextChar(): int
                 {
-                    throw new RuntimeException();
+                    throw new RuntimeException('Default Input object cannot provide any data.');
                 }
             };
         }
@@ -94,7 +94,7 @@ final class Config
             return new class() implements Output {
                 public function writeChar(int $char): void
                 {
-                    throw new RuntimeException();
+                    throw new RuntimeException('Default Output object does not accept any data.');
                 }
             };
         }
@@ -167,5 +167,23 @@ final class Config
         $this->maximumIterations = $maximumIterations;
 
         return $this;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getDefaultValues(): array
+    {
+        $defaultRegisterValue =
+            \min(
+                $this->getMaxRegisterValue(),
+                \max($this->getMinRegisterValue(), 0)
+            );
+        $defaultPointerValue = \min(
+            $this->getMaxPointerValue(),
+            \max($this->getMinPointerValue(), 0)
+        );
+
+        return ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue];
     }
 }

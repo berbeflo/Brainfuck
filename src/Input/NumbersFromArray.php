@@ -28,7 +28,7 @@ class NumbersFromArray implements Input, Resettable
     {
         \array_walk($numbersArray, function ($number) {
             if (!\is_int($number)) {
-                throw new InvalidArgumentException();
+                throw new InvalidArgumentException('The input array must consist of integers');
             }
         });
 
@@ -44,7 +44,7 @@ class NumbersFromArray implements Input, Resettable
     public function getNextChar(): int
     {
         if (\count($this->sourceArray) === 0) {
-            throw new RuntimeException();
+            throw new RuntimeException('Input Object cannot provide further data.');
         }
 
         return \array_shift($this->sourceArray);
