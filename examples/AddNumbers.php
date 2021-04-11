@@ -20,7 +20,6 @@ $brainfuckConfig
     ->setInputObject(new NumbersFromArray([7, 3]));
 $brainfuckInterpreter = new Interpreter($addNumbersProgram, $brainfuckConfig);
 $brainfuckInterpreter
-    ->prepare()
     ->execute();
 
 echo implode('', $outputObject->getResult());

@@ -29,6 +29,5 @@ $brainfuckConfig
     ->setInputObject($inputObject);
 $brainfuckInterpreter = new Interpreter($printInput, $brainfuckConfig);
 $brainfuckInterpreter
-    ->prepare()
     ->execute();
 
