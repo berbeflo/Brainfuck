@@ -27,7 +27,7 @@ class BytesFromString implements Input, Resettable
     public function getNextChar(): int
     {
         if (\strlen($this->sourceString) === 0) {
-            throw new RuntimeException();
+            throw new RuntimeException('Input Object cannot provide further data.');
         }
         $byte = \ord(\substr($this->sourceString, 0, 1));
         $this->sourceString = \substr($this->sourceString, 1);

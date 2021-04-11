@@ -7,9 +7,9 @@ namespace berbeflo\Brainfuck\Test;
 use berbeflo\Brainfuck\Config;
 use berbeflo\Brainfuck\Input\NumbersFromArray;
 use berbeflo\Brainfuck\Interpreter;
+use berbeflo\Brainfuck\InterpreterException;
 use berbeflo\Brainfuck\Output\NumbersToArray;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class InterpreterTest extends TestCase
 {
@@ -83,7 +83,7 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $interpreter = new Interpreter($bfNotWorkingCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -97,7 +97,7 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $interpreter = new Interpreter($bfNotWorkingCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -144,7 +144,7 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $interpreter = new Interpreter($bfNotWorkingCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -158,7 +158,7 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $interpreter = new Interpreter($bfNotWorkingCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -189,7 +189,7 @@ class InterpreterTest extends TestCase
             ->setMinRegisterValue(3);
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -203,7 +203,7 @@ class InterpreterTest extends TestCase
             ->setMaxRegisterValue(1);
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -214,7 +214,7 @@ class InterpreterTest extends TestCase
         $config->setAllowUnknownTokens(false);
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -310,7 +310,7 @@ class InterpreterTest extends TestCase
         $config = new Config();
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -320,7 +320,7 @@ class InterpreterTest extends TestCase
         $config = new Config();
         $interpreter = new Interpreter($bfCode, $config);
         $interpreter->prepare();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 
@@ -336,7 +336,7 @@ class InterpreterTest extends TestCase
         $interpreter->prepare()->execute();
         $config->setMaximumIterations(4);
         $input->reset();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InterpreterException::class);
         $interpreter->execute();
     }
 }

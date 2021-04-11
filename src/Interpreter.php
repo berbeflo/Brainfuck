@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace berbeflo\Brainfuck;
 
-use RuntimeException;
-
 final class Interpreter
 {
     private string $brainfuckCode;
@@ -124,7 +122,11 @@ final class Interpreter
                     if ($this->config->getAllowUnknownTokens()) {
                         continue 2;
                     }
-                    throw new RuntimeException();
+                    throw new InterpreterException(
+                        'Token is not allowed.',
+                        $currentOperator,
+                        $this->brainfuckCode[$currentOperator]
+                    );
             }
         }
 
@@ -136,7 +138,7 @@ final class Interpreter
         $char = $this->config->getInputObject()->getNextChar();
 
         if ($char > $this->config->getMaxRegisterValue() || $char < $this->config->getMinRegisterValue()) {
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $char, 'The provided char <{0}> is out of bounds'));
         }
 
         return $char;
@@ -155,7 +157,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $this->pointer, 'Cannot access register {0}'));
         }
 
         if ($this->pointer < $this->config->getMinPointerValue()) {
@@ -164,7 +166,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $this->pointer, 'Cannot access register {0}'));
         }
     }
 
@@ -178,7 +180,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $currentValue, 'Cannot handle value {0}'));
         }
 
         if ($currentValue < $this->config->getMinRegisterValue()) {
@@ -187,7 +189,7 @@ final class Interpreter
 
                 return;
             }
-            throw new RuntimeException();
+            throw new InterpreterException(str_replace('{0}', $currentValue, 'Cannot handle value {0}'));
         }
     }
 
@@ -204,7 +206,7 @@ final class Interpreter
         $endPosition = $this->searchInLoop('start', 'end', $position);
 
         if ($endPosition === 0) {
-            throw new RuntimeException();
+            throw new InterpreterException('Unmatched loops in code.');
         }
 
         return $endPosition;
@@ -223,7 +225,7 @@ final class Interpreter
             }
         }
 
-        throw new RuntimeException();
+        throw new InterpreterException('Unmatched loops in code.');
     }
 
     private function checkIterations(int $position): void
@@ -233,7 +235,7 @@ final class Interpreter
                 $this->loopPositions[$key]['counter'] += 1;
 
                 if ($this->loopPositions[$key]['counter'] > $this->config->getMaximumIterations()) {
-                    throw new RuntimeException();
+                    throw new InterpreterException('Maximum iterations exceeded.');
                 }
             }
         }
