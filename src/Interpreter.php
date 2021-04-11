@@ -12,6 +12,7 @@ final class Interpreter
     private Config $config;
 
     private int $pointer;
+    private bool $isPrepared = false;
 
     /**
      * @var array<int, int>
@@ -53,6 +54,8 @@ final class Interpreter
             }
         }
 
+        $this->isPrepared = true;
+
         return $this;
     }
 
@@ -61,10 +64,14 @@ final class Interpreter
      */
     public function execute(): Interpreter
     {
+        if (!$this->isPrepared) {
+            $this->prepare();
+        }
+
         $defaultRegisterValue = null;
         $defaultPointerValue = null;
 
-        ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue] = $this->getDefaultValues();
+        ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue] = $this->config->getDefaultValues();
 
         $this->pointer = $defaultPointerValue;
         $this->memory = [];
@@ -122,24 +129,6 @@ final class Interpreter
         }
 
         return $this;
-    }
-
-    /**
-     * @return array<string, int>
-     */
-    private function getDefaultValues(): array
-    {
-        $defaultRegisterValue =
-            \min(
-                $this->config->getMaxRegisterValue(),
-                \max($this->config->getMinRegisterValue(), 0)
-            );
-        $defaultPointerValue = \min(
-            $this->config->getMaxPointerValue(),
-            \max($this->config->getMinPointerValue(), 0)
-        );
-
-        return ['register' => $defaultRegisterValue, 'pointer' => $defaultPointerValue];
     }
 
     private function readChar(): int
@@ -205,7 +194,7 @@ final class Interpreter
     private function isLoopConditionSatisfied(): bool
     {
         $falseValue = null;
-        ['register' => $falseValue] = $this->getDefaultValues();
+        ['register' => $falseValue] = $this->config->getDefaultValues();
 
         return $this->memory[$this->pointer] > $falseValue;
     }
