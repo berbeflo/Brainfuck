@@ -2,7 +2,7 @@
 
 return PhpCsFixer\Config::create()
     ->setRules([
-        '@PSR2' => true,
+        '@PSR12' => true,
         'align_multiline_comment' => [
             'comment_type' => 'all_multiline',
         ],
@@ -25,12 +25,11 @@ return PhpCsFixer\Config::create()
         'method_chaining_indentation' => true,
         'native_function_invocation' => true,
         'new_with_braces' => true,
-        'no_blank_lines_before_namespace' => true,
         'no_leading_import_slash' => true,
         'no_unused_imports' => true,
         'ordered_imports' => true,
         'return_type_declaration' => [
-            'space_before' => 'one'
+            'space_before' => 'none'
         ],
         'strict_comparison' => true,
         'space_after_semicolon' => true,

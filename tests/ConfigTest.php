@@ -3,7 +3,6 @@
 declare(strict_types=1);
 use berbeflo\Brainfuck\Config;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class ConfigTest extends TestCase
 {
@@ -33,5 +32,6 @@ class ConfigTest extends TestCase
         $this->assertFalse($config->getWrapOnPointerOverflow());
         $this->assertFalse($config->getWrapOnRegisterOverflow());
         $this->assertSame(255, $config->getMaximumIterations());
+        $this->assertTrue($config->getAllowUnknownTokens());
     }
 }

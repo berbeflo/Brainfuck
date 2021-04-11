@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace berbeflo\Brainfuck\Input;
 
 use berbeflo\Brainfuck\Definition\Input;
@@ -9,8 +10,8 @@ use RuntimeException;
 
 class BytesFromString implements Input, Resettable
 {
-    private $sourceString;
-    private $backupString;
+    private string $sourceString;
+    private string $backupString;
 
     public function __construct(string $byteString)
     {
@@ -18,15 +19,15 @@ class BytesFromString implements Input, Resettable
         $this->backupString = $byteString;
     }
 
-    public function reset() : void
+    public function reset(): void
     {
         $this->sourceString = $this->backupString;
     }
 
-    public function getNextChar() : int
+    public function getNextChar(): int
     {
         if (\strlen($this->sourceString) === 0) {
-            throw new RuntimeException();
+            throw new RuntimeException('Input Object cannot provide further data.');
         }
         $byte = \ord(\substr($this->sourceString, 0, 1));
         $this->sourceString = \substr($this->sourceString, 1);
